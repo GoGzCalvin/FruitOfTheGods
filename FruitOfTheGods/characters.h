@@ -8,6 +8,7 @@ struct characters
 	int health;
 	int damage;
 	int heal;
+	int healthRemaining;
 	double defense;
 
 };
@@ -24,14 +25,14 @@ void DealDamage(characters &player, characters &enemy)
 
 void Heal(characters &player)
 {
-	player.heal += player.health;
-
-	cout << "You have healed " << player.heal << " damage. " << "You have " <<player.health << " health remaining." << endl;
+	player.healthRemaining = (player.health + player.heal);
+	
+	cout << "You have healed " << player.heal << " damage." << "You have " << player.healthRemaining << " health remaining." << endl;
 }
 
 void Defend(characters &player, characters &enemy)
 {
-	player.defense = (enemy.damage * 0.70);
+	player.defense = (enemy.damage * 0.75);
 
 	player.health -= player.defense;
 
@@ -39,37 +40,25 @@ void Defend(characters &player, characters &enemy)
 }
 
 
-void battle()
+void introduction()
+{
+	
+}
+
+void battle(characters &player, characters & enemy)
 {
 
 
 	int input;
 
-	characters player;
-
-	player.health = 100;
-	player.damage = 15;
-	player.defense = 10;
-	player.heal = 20;
-
-
-	characters enemy;
-
-	enemy.health = 150;
-	enemy.damage = 20;
-	enemy.defense = 5;
-	enemy.heal = 15;
+	
 
 
 
+	cout << "Fruit of the Gods!" << endl;
 
 	do
 	{
-		cout << "Fruit of the Gods!" << endl;
-
-
-
-
 
 		cout << "Input '1' to attack." << endl;
 		cout << "Input '2' to heal" << endl;
@@ -90,16 +79,16 @@ void battle()
 
 		else if (input == 3)
 		{
-			Defend();
+			Defend(player, enemy);
 		}
 
 
-		else if (player.health == 0)
+		else if (player.health < 0)
 		{
 			cout << "Player has died." << endl;
 		}
 
-		else if (enemy.health == 0)
+		else if (enemy.health < 0)
 		{
 			cout << "The zombie has died." << endl;
 		}
@@ -110,5 +99,5 @@ void battle()
 		}
 
 
-	} while (player.health >= 0 || enemy.health >= 0);
+	} while (player.health > 0 && enemy.health > 0);
 }

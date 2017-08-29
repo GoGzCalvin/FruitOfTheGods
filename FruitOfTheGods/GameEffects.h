@@ -36,15 +36,15 @@ void DelayTextWithSkip(int millisec, char word[])
 }
 
 
-void main()
-{
-	ColorPicker(7);
-	DelayTextWithSkip(300, "SLLOOOOWWWWWW MOOOTTTIIOOON");
-	TimedPause(5000);
-	cout << "Hello World" << endl;
-
-	cout << "Hello World" << endl;
-
-
-	while (true) {}
-}
+////void main()
+//{
+//	ColorPicker(7);
+//	DelayTextWithSkip(300, "SLLOOOOWWWWWW MOOOTTTIIOOON");
+//	TimedPause(5000);
+//	cout << "Hello World" << endl;
+//
+//	cout << "Hello World" << endl;
+//
+//
+//	while (true) {}
+//}
