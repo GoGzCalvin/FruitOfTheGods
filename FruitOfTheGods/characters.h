@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 
 using namespace std;
@@ -42,7 +42,9 @@ void Defend(characters &player, characters &enemy)
 
 void introduction()
 {
-	
+	cout << "You have awoken..." << endl; 
+	cout << "Your celestial powers are intact, however your angel wings will not appear..." << endl;
+	cout << "You recall your betrayal to your angelic kin to set out on your quest to become the strongest being in existence a God with angelic power." << endl;
 }
 
 void battle(characters &player, characters & enemy)

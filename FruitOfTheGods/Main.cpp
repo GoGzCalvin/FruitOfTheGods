@@ -21,6 +21,7 @@ int main()
 	enemy.defense = 5;
 	enemy.heal = 15;
 
+	introduction();
 	battle(player, enemy);
 
 
