@@ -3,37 +3,18 @@
 using namespace std;
 
 
-void ColorPicker(int color)
-{
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
-}
+void ColorPicker(int color);
 
-void TimedPause(int millisec)
-{
-	Sleep(millisec);
-}
 
-void DelayText(int millisec, char word[])
-{
-	for (int i = 0; i < strlen(word); i++)
-	{
-		cout << word[i];
-		//this_thread::sleep_for(chrono::milliseconds(millisec));
-		Sleep(millisec);
-	}
+void TimedPause(int millisec);
 
-}
-void DelayTextWithSkip(int millisec, char word[])
-{
-	for (int i = 0; i < strlen(word); i++)
-	{
-		int rando = rand() % 15 + 1;
-		ColorPicker(rando);
-		cout << word[i];
-		Sleep(millisec);
-	}
-	cout << endl;
-}
+
+void DelayText(int millisec, char word[]);
+
+void DelayTextWithSkip(int millisec, char word[]);
+
+void DelayTextWithSkipIntro(int millisec, char words[]);
+
 
 
 ////void main()

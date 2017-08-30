@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <iostream>
-
+#include "GameEffects.h"
 using namespace std;
 
 struct characters
@@ -19,7 +19,7 @@ void DealDamage(characters &player, characters &enemy)
 	enemy.health -= player.damage;
 
 
-	cout << "You attacked and dealt  " << player.damage << " damage. The zombie has " << enemy.health << " health remaining." << endl;
+	cout << "You attacked and dealt  " << player.damage << " damage. The enemy has " << enemy.health << " health remaining." << endl;
 	cout << "The enemy attacked and dealt " << enemy.damage << " damage. The player has " << player.health << " health remaining." << endl;
 }
 
@@ -42,29 +42,40 @@ void Defend(characters &player, characters &enemy)
 
 void introduction()
 {
-	cout << "You have awoken..." << endl; 
-	cout << "Your celestial powers are intact, however your angel wings will not appear..." << endl;
-	cout << "You recall your betrayal to your angelic kin to set out on your quest to become the strongest being in existence a God with angelic power." << endl;
+	ColorPicker(14);
+	char playerName[20];
+
+	/*cout << "Fruit of the Gods!" << endl;*/
+	
+	DelayTextWithSkip(20, "Welcome to Fruit of the Gods!");
+	//ColorPicker(10);
+	DelayTextWithSkip(20, "You have awoken...");
+	DelayTextWithSkip(20, "Your celestial powers are intact, however your angel wings will not appear...");
+	DelayTextWithSkip(20, "You recall your betrayal to your angelic kin to set out on your quest to become the strongest being in existence a God with angelic power.");
+	DelayTextWithSkip(20, "Although you can't seem to remember your name, what was it again?");
+
+	cin >> playerName;
+
+	char buffer[80] = "Hello ";
+	strcat_s(buffer, playerName);
+	DelayTextWithSkip(20, buffer);
+
+
+	
 }
 
 void battle(characters &player, characters & enemy)
 {
-
-
+	ColorPicker(12);
 	int input;
 
-	
-
-
-
-	cout << "Fruit of the Gods!" << endl;
+	DelayTextWithSkip(20, "Your superior Diana has confronted you. ");
 
 	do
 	{
-
-		cout << "Input '1' to attack." << endl;
-		cout << "Input '2' to heal" << endl;
-		cout << "Input '3' to defend." << endl;
+		DelayTextWithSkip(20, "Input '1' to attack.");
+		DelayTextWithSkip(20, "Input '2' to heal");
+		DelayTextWithSkip(20, "Input '3' to defend.");;
 
 
 		cin >> input;
@@ -92,7 +103,7 @@ void battle(characters &player, characters & enemy)
 
 		else if (enemy.health < 0)
 		{
-			cout << "The zombie has died." << endl;
+			cout << "The enemy has died." << endl;
 		}
 
 		else
