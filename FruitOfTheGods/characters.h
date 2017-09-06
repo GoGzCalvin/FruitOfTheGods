@@ -153,7 +153,7 @@ void afterBattle(characters player)
 
 	DelayText(25, "Well done ");
 	ColorPicker(11);
-	DelayText(25,player.name);
+	DelayTextWithSkip(25,player.name);
 	cout << "\n";
 	ColorPicker(12);
 	DelayTextWithSkip(25, "You have grown since your betrayal to the angels. \n");
@@ -161,7 +161,7 @@ void afterBattle(characters player)
 	DelayTextWithSkip(25, "Although it appears your wings have been revoked to prevent you from returning to the celestial plain. \n");
 	DelayText(25, "We shall meet again \n");
 	ColorPicker(11);
-	DelayText(25, player.name);
+	DelayTextWithSkip(25, player.name);
 	ColorPicker(15);
 
 
