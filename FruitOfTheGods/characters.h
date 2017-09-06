@@ -47,7 +47,7 @@ void DealDamage(characters &player, characters &enemy)
 
 void Heal(characters &player)
 {
-	player.healthRemaining = (player.health + player.heal);
+	player.health = (player.health + player.heal);
 	
 	DelayText(25, "You healed ");
 	ColorPicker(10);
@@ -55,7 +55,7 @@ void Heal(characters &player)
 	ColorPicker(15);
 	DelayText(25, " damage. You have ");
 	ColorPicker(10);
-	cout << player.healthRemaining;
+	cout << player.health;
 	ColorPicker(15);
 	DelayTextWithSkip(25, " health remaining. \n");
 }
