@@ -1,8 +1,11 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 #include "characters.h"
 #include "GameEffects.h"
 
 using namespace std;
+
 
 int main()
 {
@@ -21,10 +24,21 @@ int main()
 	enemy.defense = 5;
 	enemy.heal = 15;
 
-	introduction(player);
+	//Start of game
+
+	//Load old file or create new?
+
+	//if(Load old file)
+	//LoadFromFileVersion
+
+
+	//else create new
+	//CharacterCreation
+
+
+	updatedIntro(player);
+
+	//introduction(player);
 	battle(player, enemy);
 	afterBattle(player);
-
-
-	//battle(player, ogre);
 }

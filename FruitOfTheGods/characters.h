@@ -1,6 +1,13 @@
 ﻿#pragma once
 #include <iostream>
+#include <fstream>
+#include <string>
 #include "GameEffects.h"
+
+using std::string;
+
+using std::fstream;
+
 using namespace std;
 
 struct characters
@@ -145,29 +152,128 @@ void introduction(characters &player)
 	
 }
 
-void afterBattle(characters player)
+void UpdatedDealDamage(characters &player, characters &enemy)
 {
-	ColorPicker(12);
-	char playerName[25];
-	
+	player.health -= enemy.damage;
+	enemy.health -= player.damage;
 
-	DelayText(25, "Well done ");
+	// Player Attack
+	DelayText(25, "You attacked and dealt ");
 	ColorPicker(11);
-	DelayTextWithSkip(25,player.name);
-	cout << "\n";
-	ColorPicker(12);
-	DelayTextWithSkip(25, "You have grown since your betrayal to the angels. \n");
-	DelayTextWithSkip(25, "Our brothers and sisters assumed you would have lost your grace after betraying us. \n");
-	DelayTextWithSkip(25, "Although it appears your wings have been revoked to prevent you from returning to the celestial plain. \n");
-	DelayText(25, "We shall meet again \n");
-	ColorPicker(11);
-	DelayTextWithSkip(25, player.name);
+	cout << player.damage;
 	ColorPicker(15);
+	DelayText(25, " damage. The enemy has ");
+	ColorPicker(12);
+	cout << enemy.health;
+	ColorPicker(15);
+	DelayText(25, " health remaining.");
+	cout << "\n";
+
+
+
+	// Enemy Attack
+	DelayText(25, "The enemy attacked and dealt ");
+	ColorPicker(12);
+	cout << enemy.damage;
+	ColorPicker(15);
+	DelayText(25, " damage. The player has ");
+	ColorPicker(10);
+	cout << player.health;
+	ColorPicker(15);
+	DelayText(25, " health remaining.");
+	cout << "\n";
+}
+
+void updatedIntro(characters &player)
+{
+	ColorPicker(14);
+	char playerName[25];
+
+	DelayTextWithSkip(25, "Welcome to Fruit of the Gods! \n");
+	DelayTextWithSkip(25, "You have awoken... \n");
+	DelayTextWithSkip(25, "Your celestial powers are intact, however your angel wings will not appear... \n");
+	DelayTextWithSkip(25, "You recall your betrayal to your angelic kin to set out on your quest to become the strongest being in existence a God with angelic power. \n");
+
+
+
+	string inputBuffer;
+
+	DelayTextWithSkip(25, "Although you can't seem to remember your name, what was it again? \n");
+	cin >> inputBuffer;
+
+	ColorPicker(11);
+	cout << "\n";
+
+	string Hello = "Hello, ";
+
+	Hello.append(inputBuffer);
+	cout << "\n";
+
+	DelayTextWithSkip(15, Hello);
+
+	cout << "\n";
 
 
 
 
 
+	fstream profileData;
+	string FileName = inputBuffer;
+	FileName.append(".txt");
+	profileData.open(FileName, ios_base::out);
+
+
+
+
+	if (profileData.fail())
+	{
+		cout << "Sorry, doesn't seem like we can save there. :(" << endl;
+		return;
+	}
+
+
+	cin.ignore(1000, '\n');
+	
+	profileData << inputBuffer << endl;
+
+	//attributes[]
+
+	ColorPicker(14);
+	DelayTextWithSkip(25, "Due to your fall from the angelic realm you must readjust your powers.");
+	//DelayTextWithSkip(25, "You have 50 attribute points to spend.");
+	int SkillPoints = 50;
+	
+	while (SkillPoints > 0)
+	{
+		DelayTextWithSkip(25, "You have 50 attribute points to spend.");
+		ColorPicker(12);
+		DelayTextWithSkip(25, "Strength?");
+		getline(cin, inputBuffer);
+		SkillPoints -= stoi(inputBuffer);
+		profileData << inputBuffer << endl;
+
+		ColorPicker(15);
+		DelayTextWithSkip(25, "Defense?");
+		getline(cin, inputBuffer);
+		SkillPoints -= stoi(inputBuffer);
+		profileData << inputBuffer << endl;
+
+		ColorPicker(11);
+		DelayTextWithSkip(25, "Healing");
+		getline(cin, inputBuffer);
+		SkillPoints -= stoi(inputBuffer);
+		profileData << inputBuffer << endl;
+
+		if (SkillPoints != 0)
+		{
+			SkillPoints = 50;
+			std::cout << "You didn't use all your skill points" << std::endl;
+		}
+
+	}
+
+	profileData.flush();
+	profileData.close();
 }
 
 void battle(characters &player, characters & enemy)
@@ -178,7 +284,7 @@ void battle(characters &player, characters & enemy)
 	DelayText(25, "You have been challenged by your superior ");
 	ColorPicker(12);
 	DelayTextWithSkip(25, "Altair.");
-	
+
 	do
 	{
 		// Attack
@@ -192,7 +298,7 @@ void battle(characters &player, characters & enemy)
 		// Heal
 		cout << "Input '2' to ";
 		ColorPicker(10);
-		cout <<	" heal \n";
+		cout << " heal \n";
 
 
 		// Defend
@@ -264,3 +370,29 @@ void battle(characters &player, characters & enemy)
 
 	} while (player.health > 0 && enemy.health > 0);
 }
+
+void afterBattle(characters player)
+{
+	ColorPicker(12);
+	char playerName[25];
+	
+
+	DelayText(25, "Well done ");
+	ColorPicker(11);
+	DelayTextWithSkip(25,player.name);
+	cout << "\n";
+	ColorPicker(12);
+	DelayTextWithSkip(25, "You have grown since your betrayal to the angels. \n");
+	DelayTextWithSkip(25, "Our brothers and sisters assumed you would have lost your grace after betraying us. \n");
+	DelayTextWithSkip(25, "Although it appears your wings have been revoked to prevent you from returning to the celestial plain. \n");
+	DelayText(25, "We shall meet again \n");
+	ColorPicker(11);
+	DelayTextWithSkip(25, player.name);
+	ColorPicker(15);
+
+
+
+
+
+}
+

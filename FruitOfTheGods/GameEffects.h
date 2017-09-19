@@ -15,7 +15,11 @@ void DelayTextWithSkip(int millisec, char word[]);
 
 void DelayTextWithSkipIntro(int millisec, char words[]);
 
+void DelayText(int millisec, string word);
 
+void DelayTextWithSkip(int millisec, string word);
+
+void DelayTextWithSkipIntro(int millisec, char words[]);
 
 ////void main()
 //{
