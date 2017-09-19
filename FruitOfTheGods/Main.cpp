@@ -13,27 +13,40 @@ void Start(characters &player, characters &enemy)
 	
 	string userResponse;
 
+	ColorPicker(15);
 	DelayTextWithSkip(25, "Welcome to Fruit of the Gods! \n");
-	DelayTextWithSkip(25, "Would you like to start a new game or load a save file? \n");
-
-	cin >> userResponse;
-
-	if (userResponse == "New" || "new")
+	while (userResponse != "New" || userResponse != "Load")
 	{
-		updatedIntro(player);
-	}
+		DelayTextWithSkip(25, "Would you like to start a new game or load a save file?" "\n" "Enter 'New' or 'Load'");
 
-	else if (userResponse == "Load" || "load")
-	{
-		LoadCharacter(player);
-		battle(player, enemy);
-		afterBattle(player);
-	}
+		cin >> userResponse;
 
-	else
-	{
-		DelayTextWithSkip(25, "That isn't one of the options.");
+		if (userResponse == "New")
+		{
+			updatedIntro(player);
+			battle(player, enemy);
+			afterBattle(player);
+		}
+
+		else if (userResponse == "Load")
+		{
+			LoadCharacter(player);
+			ColorPicker(15);
+			DelayText(25, "Welcome Back ");
+			ColorPicker(11);
+			cout << player.name;
+			DelayText(25, "\n");
+
+			battle(player, enemy);
+			afterBattle(player);
+		}
+
+		else
+		{
+			DelayTextWithSkip(25, "That isn't one of the options.");
+		}
 	}
+	
 
 }
 
@@ -53,10 +66,10 @@ int main()
 
 	characters enemy;
 
-	enemy.health = 150;
-	enemy.strength = 25;
-	enemy.defense = 5;
-	enemy.healing = 15;
+	enemy.health = 100;
+	enemy.strength = 20;
+	//enemy.defense = 5;
+	//enemy.healing = 15;
 
 	//Start of game
 	Start(player, enemy);
@@ -72,6 +85,6 @@ int main()
 
 	//updatedIntro(player);
 	//introduction(player);
-	battle(player, enemy);
-	afterBattle(player);
+	//battle(player, enemy);
+	//afterBattle(player);
 }
