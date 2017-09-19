@@ -29,11 +29,5 @@
     <ClInclude Include="GameEffects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="entity.txt" />
   </ItemGroup>
 </Project>

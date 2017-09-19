@@ -12,23 +12,23 @@ using namespace std;
 
 struct characters
 {
-	char name[50];
+	string name;
 	int health;
-	int damage;
-	int heal;
+	int strength;
+	int healing;
 	int healthRemaining;
 	double defense;
 };
 
 void DealDamage(characters &player, characters &enemy)
 {
-	player.health -= enemy.damage;
-	enemy.health -= player.damage;
+	player.health -= enemy.strength;
+	enemy.health -= player.strength;
 
 	// Player Attack
 	DelayText(25, "You attacked and dealt ");
 	ColorPicker(11);
-	cout << player.damage;
+	cout << player.strength;
 	ColorPicker(15);
 	DelayText(25, " damage. The enemy has ");
 	ColorPicker(12);
@@ -42,7 +42,7 @@ void DealDamage(characters &player, characters &enemy)
 	// Enemy Attack
 	DelayText(25, "The enemy attacked and dealt ");
 	ColorPicker(12);
-	cout << enemy.damage;
+	cout << enemy.strength;
 	ColorPicker(15);
 	DelayText(25, " damage. The player has ");
 	ColorPicker(10);
@@ -54,11 +54,16 @@ void DealDamage(characters &player, characters &enemy)
 
 void Heal(characters &player)
 {
-	player.health = (player.health + player.heal);
+	player.health = (player.health + player.healing);
+
+	if (player.health < player.health)
+	{
+		DelayTextWithSkip(25, "You can't give yourself more health during battle. Nice try. :)");
+	}
 	
 	DelayText(25, "You healed ");
 	ColorPicker(10);
-	cout << player.heal;
+	cout << player.healing;
 	ColorPicker(15);
 	DelayText(25, " damage. You have ");
 	ColorPicker(10);
@@ -69,7 +74,7 @@ void Heal(characters &player)
 
 void Defend(characters &player, characters &enemy)
 {
-	player.defense = (enemy.damage * 0.75);
+	player.defense = (enemy.strength * 0.75);
 
 	player.health -= player.defense;
 
@@ -95,12 +100,17 @@ void playerStats(characters &player)
 
 	cout << "Attack. ";
 	ColorPicker(12);
-	cout << player.damage << endl;
+	cout << player.strength << endl;
 	ColorPicker(15);
 
 	cout << "Defense. ";
 	ColorPicker(11);
 	cout << player.defense << endl;
+	ColorPicker(15);
+
+	cout << "Healing ";
+	ColorPicker(10);
+	cout << player.healing << endl;
 	ColorPicker(15);
 
 
@@ -116,7 +126,7 @@ void enemyStats(characters &enemy)
 
 	cout << "Attack. ";
 	ColorPicker(12);
-	cout << enemy.damage << endl;
+	cout << enemy.strength << endl;
 	ColorPicker(15);
 
 	cout << "Defense. ";
@@ -144,7 +154,7 @@ void introduction(characters &player)
 	cin >> player.name;
 	cout << "\n";
 	char buffer[80] = "Hello, ";
-	strcat_s(buffer, player.name);
+	//strcat_s(buffer, player.name);
 	cout << "\n";
 	DelayTextWithSkip(15, buffer);
 	cout << "\n";
@@ -154,13 +164,13 @@ void introduction(characters &player)
 
 void UpdatedDealDamage(characters &player, characters &enemy)
 {
-	player.health -= enemy.damage;
-	enemy.health -= player.damage;
+	player.health -= enemy.strength;
+	enemy.health -= player.strength;
 
 	// Player Attack
 	DelayText(25, "You attacked and dealt ");
 	ColorPicker(11);
-	cout << player.damage;
+	cout << player.strength;
 	ColorPicker(15);
 	DelayText(25, " damage. The enemy has ");
 	ColorPicker(12);
@@ -174,7 +184,7 @@ void UpdatedDealDamage(characters &player, characters &enemy)
 	// Enemy Attack
 	DelayText(25, "The enemy attacked and dealt ");
 	ColorPicker(12);
-	cout << enemy.damage;
+	cout << enemy.strength;
 	ColorPicker(15);
 	DelayText(25, " damage. The player has ");
 	ColorPicker(10);
@@ -184,12 +194,44 @@ void UpdatedDealDamage(characters &player, characters &enemy)
 	cout << "\n";
 }
 
+
+void LoadCharacter(characters &player)
+{
+	fstream Load;
+	string FileName;
+	//Ask them for the file/characterName that they woud like to open
+	DelayText(25, "What was the name of the character you wish to load? \n");
+	
+	cin >> FileName;
+	FileName.append(".txt");
+	
+
+	Load.open(FileName);
+
+	if (Load.fail())
+	{
+		DelayText(25, "The file doesn't exist. \n");
+	}
+
+	getline(Load, FileName); // is our name
+
+	getline(Load, FileName); // strength
+	player.strength = stoi(FileName);
+
+	getline(Load, FileName); // defense
+	player.defense = stoi(FileName);
+
+	getline(Load, FileName); // healing
+	player.healing = stoi(FileName);
+
+	player.health = player.defense * 4;
+
+}
+
 void updatedIntro(characters &player)
 {
 	ColorPicker(14);
-	char playerName[25];
 
-	DelayTextWithSkip(25, "Welcome to Fruit of the Gods! \n");
 	DelayTextWithSkip(25, "You have awoken... \n");
 	DelayTextWithSkip(25, "Your celestial powers are intact, however your angel wings will not appear... \n");
 	DelayTextWithSkip(25, "You recall your betrayal to your angelic kin to set out on your quest to become the strongest being in existence a God with angelic power. \n");
@@ -200,6 +242,8 @@ void updatedIntro(characters &player)
 
 	DelayTextWithSkip(25, "Although you can't seem to remember your name, what was it again? \n");
 	cin >> inputBuffer;
+	
+	player.name = inputBuffer;
 
 	ColorPicker(11);
 	cout << "\n";
@@ -250,24 +294,30 @@ void updatedIntro(characters &player)
 		DelayTextWithSkip(25, "Strength?");
 		getline(cin, inputBuffer);
 		SkillPoints -= stoi(inputBuffer);
+		player.strength = stoi(inputBuffer);
 		profileData << inputBuffer << endl;
 
 		ColorPicker(15);
 		DelayTextWithSkip(25, "Defense?");
 		getline(cin, inputBuffer);
 		SkillPoints -= stoi(inputBuffer);
+		player.defense = stoi(inputBuffer);
 		profileData << inputBuffer << endl;
 
 		ColorPicker(11);
 		DelayTextWithSkip(25, "Healing");
 		getline(cin, inputBuffer);
 		SkillPoints -= stoi(inputBuffer);
+		player.healing = stoi(inputBuffer);
 		profileData << inputBuffer << endl;
+
+
+		player.health = player.defense * 4;
 
 		if (SkillPoints != 0)
 		{
 			SkillPoints = 50;
-			std::cout << "You didn't use all your skill points" << std::endl;
+			cout << "You didn't use all your skill points" << endl;
 		}
 
 	}
@@ -379,7 +429,7 @@ void afterBattle(characters player)
 
 	DelayText(25, "Well done ");
 	ColorPicker(11);
-	DelayTextWithSkip(25,player.name);
+	DelayTextWithSkip(25, player.name);
 	cout << "\n";
 	ColorPicker(12);
 	DelayTextWithSkip(25, "You have grown since your betrayal to the angels. \n");
