@@ -7,7 +7,7 @@
 using namespace std;
 
 
-void Start(characters &player, characters &enemy)
+void Start(characters &player, characters &enemy, characters &knight)
 {
 
 	
@@ -25,7 +25,9 @@ void Start(characters &player, characters &enemy)
 		{
 			updatedIntro(player);
 			battle(player, enemy);
-			afterBattle(player);
+			afterAltair(player);
+			experience(player);
+			battle2(player, knight);
 		}
 
 		else if (userResponse == "Load")
@@ -38,7 +40,10 @@ void Start(characters &player, characters &enemy)
 			DelayText(25, "\n");
 
 			battle(player, enemy);
-			afterBattle(player);
+			afterAltair(player);
+			experience(player);
+
+			battle2(player, knight);
 		}
 
 		else
@@ -68,11 +73,16 @@ int main()
 
 	enemy.health = 100;
 	enemy.strength = 20;
+
+	characters knight;
+	knight.health = 50;
+	knight.strength = 25;
+	
 	//enemy.defense = 5;
 	//enemy.healing = 15;
 
 	//Start of game
-	Start(player, enemy);
+	Start(player, enemy, knight);
 	//Load old file or create new?
 
 	//if(Load old file)

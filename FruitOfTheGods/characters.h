@@ -21,10 +21,27 @@ struct characters
 	double defense;
 };
 
+void EstimatedDmg(characters &defending, characters &attacking)
+{
+	if (defending.health - attacking.strength < 0)
+	{
+		defending.health = 0;
+	}
+	else
+	{
+		defending.health -= attacking.strength;
+	}
+}
+
+
 void DealDamage(characters &player, characters &enemy)
 {
-	player.health -= enemy.strength;
-	enemy.health -= player.strength;
+	/*player.health -= enemy.strength;
+	enemy.health -= player.strength;*/
+
+	EstimatedDmg(player, enemy);
+	EstimatedDmg(enemy, player);
+
 
 	// Player Attack
 	DelayText(25, "You attacked and dealt ");
@@ -92,7 +109,7 @@ void Heal(characters &player)
 
 void Defend(characters &player, characters &enemy)
 {
-	player.defense = (enemy.strength * 0.75);
+	player.defense = (enemy.strength * 0.50);
 
 	player.health -= player.defense;
 
@@ -172,7 +189,31 @@ void enemyStats(characters &enemy)
 //
 //	
 //}
+void WriteStatsToFile(characters &player)
+{
+	fstream profileData;
+	string FileName = player.name;
+	FileName.append(".txt");
+	profileData.open(FileName, ios_base::out | std::ios_base::trunc);
 
+
+
+
+	if (profileData.fail())
+	{
+		cout << "Sorry, doesn't seem like we can save there. :(" << endl;
+		return;
+	}
+
+
+	profileData << player.name << endl;
+	profileData << player.strength << endl;
+	profileData << player.defense << endl;
+	profileData << player.healing << endl;
+
+	profileData.flush();
+	profileData.close();
+}
 
 void LoadCharacter(characters &player)
 {
@@ -260,7 +301,6 @@ void updatedIntro(characters &player)
 	
 	profileData << inputBuffer << endl;
 
-	//attributes[]
 
 	ColorPicker(14);
 	DelayTextWithSkip(25, "Due to your fall from the angelic realm you must readjust your powers.");
@@ -306,6 +346,8 @@ void updatedIntro(characters &player)
 	profileData.close();
 }
 
+
+
 void battle(characters &player, characters & enemy)
 {
 	ColorPicker(15);
@@ -318,6 +360,11 @@ void battle(characters &player, characters & enemy)
 
 	do
 	{
+		if (HealCD < 0)
+		{
+			HealCD = 0;
+		}
+
 		// Attack
 		ColorPicker(15);
 		cout << "Input '1' to ";
@@ -358,10 +405,16 @@ void battle(characters &player, characters & enemy)
 
 		cin >> input;
 
+		
+
 		if (input == 1)
 		{
 			DealDamage(player, enemy);
 			HealCD--;
+			if (HealCD < 0)
+			{
+				HealCD = 0;
+			}
 		}
 
 		else if (input == 2 && HealCD == 0)
@@ -374,6 +427,10 @@ void battle(characters &player, characters & enemy)
 		{
 			Defend(player, enemy);
 			HealCD--;
+			if (HealCD < 0)
+			{
+				HealCD = 0;
+			}
 		}
 
 		else if (input == 4)
@@ -387,14 +444,16 @@ void battle(characters &player, characters & enemy)
 		}
 
 
-		else if (player.health < 0)
+		if (player.health <= 0)
 		{
 			DelayTextWithSkip(25, "You have been defeated.");
+			player.health = 0;
 		}
 
-		else if (enemy.health < 0)
+		if (enemy.health <= 0)
 		{
 			DelayTextWithSkip(25, "The enemy has been defeated.");
+			enemy.health = 0;
 		}
 
 		else
@@ -406,7 +465,7 @@ void battle(characters &player, characters & enemy)
 	} while (player.health > 0 && enemy.health > 0);
 }
 
-void afterBattle(characters player)
+void afterAltair(characters player)
 {
 	ColorPicker(12);
 	char playerName[25];
@@ -420,14 +479,178 @@ void afterBattle(characters player)
 	DelayTextWithSkip(25, "You have grown since your betrayal to the angels. \n");
 	DelayTextWithSkip(25, "Our brothers and sisters assumed you would have lost your grace after betraying us. \n");
 	DelayTextWithSkip(25, "Although it appears your wings have been revoked to prevent you from returning to the celestial plain. \n");
-	DelayText(25, "We shall meet again");
+	DelayText(25, "We shall meet again ");
 	ColorPicker(11);
 	DelayTextWithSkip(25, player.name);
 	ColorPicker(15);
-
-
-
-
-
+	cout << "\n";
 }
 
+void experience(characters &player)
+{
+	int ExpPoints = 20;
+	int Input;
+
+
+	ColorPicker(11);
+	DelayText(25, player.name );
+	ColorPicker(15);
+	DelayText(25, " your battle with Altair has given you experience.");
+	cout << "\n";
+	DelayTextWithSkip(25, "You have 20 skillpoints to add to your attributes.");
+
+	while (ExpPoints > 0)
+	{
+		ColorPicker(12);
+		DelayTextWithSkip(25, "How many points will you add to your Strength?");
+		cin >> Input;
+		ExpPoints -= Input;
+		player.strength += Input;
+	
+
+		ColorPicker(11);
+		DelayTextWithSkip(25, "How many points will you add to your Defense?");
+		cin >> Input;
+		ExpPoints -= Input;
+		player.defense += Input;
+		
+
+		ColorPicker(10);
+		DelayTextWithSkip(25, "How many points will you add to your Healing");
+		cin >> Input;
+		ExpPoints -= Input;
+		player.healing += Input;
+
+		if (ExpPoints != 0)
+		{
+			ColorPicker(15);
+			ExpPoints = 20;
+			cout << "You didn't use all your skill points" << endl;
+
+		}
+		
+	}
+	player.Maxhealth = player.defense * 4;
+	player.health = player.Maxhealth;
+	WriteStatsToFile(player);
+}
+
+void battle2(characters &player, characters &knight)
+{
+	ColorPicker(15);
+	int input;
+	int HealCD = 1;
+
+	DelayText(25, "You have been attacked by a ");
+	ColorPicker(12);
+	DelayTextWithSkip(25, "Knight.");
+
+	do
+	{
+		if (HealCD < 0)
+		{
+			HealCD = 0;
+		}
+
+		// Attack
+		ColorPicker(15);
+		cout << "Input '1' to ";
+		ColorPicker(12);
+		cout << " Attack \n";
+		ColorPicker(15);
+
+
+		// Heal
+		cout << "Input '2' to ";
+		ColorPicker(10);
+		cout << " Heal" << " (Healing Cooldown: " << HealCD << " Turn[s])" << "\n";
+
+
+
+		// Defend
+		ColorPicker(15);
+		cout << "Input '3' to ";
+		ColorPicker(11);
+		cout << " Defend \n";
+		ColorPicker(15);
+
+
+		// Player Stats
+		ColorPicker(15);
+		cout << "Input '4' to ";
+		ColorPicker(14);
+		cout << " View Player Stats \n";
+		ColorPicker(15);
+
+
+		//EnemyStats
+		cout << "Input '5' to ";
+		ColorPicker(12);
+		cout << " View Enemy Stats \n";
+		ColorPicker(15);
+
+
+		cin >> input;
+
+		if (input == 1)
+		{
+			DealDamage(player, knight);
+			HealCD--;
+			if (HealCD < 0)
+			{
+				HealCD = 0;
+			}
+		}
+
+		else if (input == 2 && HealCD == 0)
+		{
+			HealCD = 3;
+			Heal(player);
+		}
+
+		else if (input == 3)
+		{
+			Defend(player, knight);
+			HealCD--;
+			if (HealCD < 0)
+			{
+				HealCD = 0;
+			}
+		}
+
+		else if (input == 4)
+		{
+			playerStats(player);
+		}
+
+		else if (input == 5)
+		{
+			enemyStats(knight);
+		}
+
+
+		else if (player.health <= 0)
+		{
+			DelayTextWithSkip(25, "You have been defeated.");
+			//.health = 0;
+		}
+
+		else if (knight.health <= 0)
+		{
+			DelayTextWithSkip(25, "The enemy has been defeated.");
+			//knight.health = 0;
+		}
+
+		else if (HealCD < 0)
+		{
+			HealCD = 0;
+		}
+
+		else
+		{
+			cout << "Choose one of the available options. " << endl;
+		}
+
+
+	} while (player.health > 0 && knight.health > 0);
+}
